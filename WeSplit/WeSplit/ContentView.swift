@@ -51,9 +51,11 @@ struct ContentView: View {
                 // Why on Earth would anyonee want an all-caps header? #iOS 14 solution
                 .textCase(nil)
 
-                Section {
+                Section(header: Text("Amount per person")) {
                     Text("$\(totalPerPerson, specifier: "%.2f")")
                 }
+                // Also works
+                .textCase(.none)
             }
             .navigationBarTitle("WeSplit")
         }
