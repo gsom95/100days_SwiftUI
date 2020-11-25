@@ -40,6 +40,12 @@ struct ContentView: View {
                             .shadow(color: .black, radius: 2)
                     })
                 }
+
+                Text("Current score: \(score)")
+                    .foregroundColor(.white)
+                    .font(.title)
+                    .padding()
+
                 Spacer()
             }
         }
