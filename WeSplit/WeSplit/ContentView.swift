@@ -14,6 +14,18 @@ struct ContentView: View {
 
     let tipPercentages = [0, 10, 15, 20, 25]
 
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let selectedTipPercentage = Double(tipPercentages[tipPercentage])
+        let enteredCheckAmount = Double(checkAmount) ?? 0
+
+        let amountPerPerson = (enteredCheckAmount
+                                + (enteredCheckAmount / 100 * selectedTipPercentage))
+            / peopleCount
+
+        return amountPerPerson
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -38,6 +50,10 @@ struct ContentView: View {
                 }
                 // Why on Earth would anyonee want an all-caps header? #iOS 14 solution
                 .textCase(nil)
+
+                Section {
+                    Text("$\(totalPerPerson, specifier: "%.2f")")
+                }
             }
             .navigationBarTitle("WeSplit")
         }
