@@ -27,6 +27,17 @@ struct ContentView: View {
                         }
                     }
                 }
+
+                Section(header: Text("How much tip do you want to leave?")) {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(0 ..< tipPercentages.count) {
+                            Text("\(tipPercentages[$0])%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                // Why on Earth would anyonee want an all-caps header? #iOS 14 solution
+                .textCase(nil)
             }
             .navigationBarTitle("WeSplit")
         }
