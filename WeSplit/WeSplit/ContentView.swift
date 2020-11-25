@@ -14,14 +14,18 @@ struct ContentView: View {
 
     let tipPercentages = [0, 10, 15, 20, 25]
 
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+    var totalAmount: Double {
         let selectedTipPercentage = Double(tipPercentages[tipPercentage])
         let enteredCheckAmount = Double(checkAmount) ?? 0
 
-        let amountPerPerson = (enteredCheckAmount
-                                + (enteredCheckAmount / 100 * selectedTipPercentage))
-            / peopleCount
+        let tip = enteredCheckAmount / 100 * selectedTipPercentage
+
+        return enteredCheckAmount + tip
+    }
+
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let amountPerPerson = totalAmount / peopleCount
 
         return amountPerPerson
     }
@@ -50,6 +54,10 @@ struct ContentView: View {
                 }
                 // Why on Earth would anyonee want an all-caps header? #iOS 14 solution
                 .textCase(nil)
+
+                Section(header: Text("Total amount")) {
+                    Text("$\(totalAmount, specifier: "%.2f")")
+                }
 
                 Section(header: Text("Amount per person")) {
                     Text("$\(totalPerPerson, specifier: "%.2f")")
