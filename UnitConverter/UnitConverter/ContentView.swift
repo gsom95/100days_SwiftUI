@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+enum Conversions: String, Equatable, CaseIterable {
+    case temperature
+    case length
+    case volume
+}
+
 struct ContentView: View {
     var body: some View {
         Text("Hello, world!")
