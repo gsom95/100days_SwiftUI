@@ -15,9 +15,25 @@ enum Conversions: String, Equatable, CaseIterable {
 
 struct ContentView: View {
     let conversionToUnits: [Conversions: [Unit]] = [
-        .temperature: [UnitTemperature.celsius, UnitTemperature.fahrenheit, UnitTemperature.kelvin],
-        .length: [UnitLength.centimeters, UnitLength.meters, UnitLength.kilometers, UnitLength.feet, UnitLength.yards, UnitLength.miles],
-        .volume: [UnitVolume.cubicCentimeters, UnitVolume.cubicMeters, UnitVolume.cubicFeet, UnitVolume.cubicYards],
+        .temperature: [
+            UnitTemperature.celsius,
+            UnitTemperature.fahrenheit,
+            UnitTemperature.kelvin,
+        ],
+        .length: [
+            UnitLength.centimeters,
+            UnitLength.meters,
+            UnitLength.kilometers,
+            UnitLength.feet,
+            UnitLength.yards,
+            UnitLength.miles,
+        ],
+        .volume: [
+            UnitVolume.cubicCentimeters,
+            UnitVolume.cubicMeters,
+            UnitVolume.cubicFeet,
+            UnitVolume.cubicYards,
+        ],
     ]
 
     @State private var currentConversion = Conversions.temperature
