@@ -5,6 +5,7 @@
 //  Created by Igor on 26.11.2020.
 //
 
+import Combine
 import SwiftUI
 
 enum Conversions: String, Equatable, CaseIterable {
@@ -64,6 +65,13 @@ struct ContentView: View {
                         HStack {
                             TextField("Unit 1", text: $input1)
                                 .keyboardType(.decimalPad)
+                                .onReceive(Just(input1), perform: { newValue in
+                                    let filtered = filterInputForDecimal(newValue)
+
+                                    if filtered != newValue {
+                                        input1 = filtered
+                                    }
+                                })
 
                             // .labelsHidden doesn't work
                             Picker("", selection: $unit1Type) {
@@ -90,6 +98,19 @@ struct ContentView: View {
             }
             .navigationBarTitle("Unit converter")
         }
+    }
+
+    func filterInputForDecimal(_ newValue: String) -> String {
+        var filtered = newValue.filter { "0123456789.".contains($0) }
+        if let decimalPointIndex = filtered.firstIndex(of: ".") {
+            while let anotherDecimalPointIndex = filtered.lastIndex(of: "."),
+                  anotherDecimalPointIndex != decimalPointIndex
+            {
+                filtered.remove(at: anotherDecimalPointIndex)
+            }
+        }
+
+        return filtered
     }
 }
 
