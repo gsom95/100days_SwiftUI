@@ -8,95 +8,117 @@
 import Combine
 import SwiftUI
 
-enum Conversions: String, Equatable, CaseIterable {
-    case temperature
-    case length
-    case volume
-}
-
 struct ContentView: View {
-    let conversionToUnits: [Conversions: [Unit]] = [
-        .temperature: [
-            UnitTemperature.celsius,
-            UnitTemperature.fahrenheit,
-            UnitTemperature.kelvin,
-        ],
-        .length: [
-            UnitLength.centimeters,
-            UnitLength.meters,
-            UnitLength.kilometers,
-            UnitLength.feet,
-            UnitLength.yards,
-            UnitLength.miles,
-        ],
-        .volume: [
-            UnitVolume.cubicCentimeters,
-            UnitVolume.cubicMeters,
-            UnitVolume.cubicFeet,
-            UnitVolume.cubicYards,
-        ],
+    private static let units = [
+        UnitLength.centimeters,
+        UnitLength.meters,
+        UnitLength.kilometers,
+        UnitLength.feet,
+        UnitLength.yards,
+        UnitLength.miles,
     ]
 
-    @State private var currentConversion = Conversions.temperature
-    @State private var input1 = ""
-    @State private var input2 = ""
-    @State private var unit1Type: Unit = UnitTemperature.celsius
-    @State private var unit2Type: Unit = UnitTemperature.fahrenheit
+    @State private var input1 = "0"
+    @State private var input2 = "0"
+    @State private var input1UnitIndex = 0
+    @State private var input2UnitIndex = 1
+    @State private var isInput1Editing = false
+    @State private var isInput2Editing = false
 
     var body: some View {
         NavigationView {
-            HStack {
-                Form {
-                    Section(header: Text("Choose what type of conversion you want")) {
-                        Picker("Conversion type", selection: $currentConversion) {
-                            ForEach(Conversions.allCases, id: \.self) { val in
-                                Text(val.rawValue.capitalized)
-                                    .tag(val)
-                            }
-                        }
-                        .onChange(of: currentConversion) { _ in
-                            unit1Type = conversionToUnits[currentConversion]![0]
-                            unit2Type = conversionToUnits[currentConversion]![1]
-                        }
-                    }
-                    .textCase(.none)
+            Form {
+                Section(header: Text("Enter numbers and choose units")) {
+                    HStack {
+                        TextField("", text: $input1,
+                                  onEditingChanged: {
+                                      isInput1Editing = $0
 
-                    Section(header: Text("Enter numbers and choose units")) {
-                        HStack {
-                            TextField("Unit 1", text: $input1)
-                                .keyboardType(.decimalPad)
-                                .onReceive(Just(input1), perform: { newValue in
-                                    let filtered = filterInputForDecimal(newValue)
+                                      if isInput1Editing, input1 == "0" || input1 == "0.0" {
+                                          input1 = ""
+                                      }
+                                      if !isInput1Editing, input1 == "." || input1 == "" {
+                                          input1 = "0"
+                                      }
+                                  },
+                                  onCommit: {
+                                      let input1Val = Measurement(value: Double(input1)!, unit: ContentView.units[input1UnitIndex])
+                                      input2 = "\(input1Val.converted(to: ContentView.units[input2UnitIndex]).value)"
+                                  })
+                            .keyboardType(.decimalPad)
+                            .onReceive(Just(input1), perform: { newValue in
+                                let filtered = filterInputForDecimal(newValue)
 
-                                    if filtered != newValue {
-                                        input1 = filtered
-                                    }
-                                })
-
-                            // .labelsHidden doesn't work
-                            Picker("", selection: $unit1Type) {
-                                ForEach(conversionToUnits[currentConversion]!, id: \.self) { unit in
-                                    Text(unit.symbol)
+                                if filtered != newValue {
+                                    input1 = filtered
                                 }
-                            }
-                        }
-
-                        HStack {
-                            TextField("Unit 2", text: $input2)
-                                .keyboardType(.decimalPad)
-
-                            // .labelsHidden doesn't work
-                            Picker("", selection: $unit2Type) {
-                                ForEach(conversionToUnits[currentConversion]!, id: \.self) { unit in
-                                    Text(unit.symbol)
+                            })
+                            .onChange(of: input1, perform: { _ in
+                                if !isInput2Editing {
+                                    let input1Val = Measurement(value: Double(input1) ?? 0, unit: ContentView.units[input1UnitIndex])
+                                    input2 = "\(input1Val.converted(to: ContentView.units[input2UnitIndex]).value)"
                                 }
+                            })
+
+                        // .labelsHidden doesn't work
+                        Picker("", selection: $input1UnitIndex) {
+                            ForEach(0..<ContentView.units.count) { index in
+                                Text(ContentView.units[index].symbol)
                             }
                         }
+                        .onChange(of: input1UnitIndex, perform: { [input1UnitIndex] value in
+                            if value == input2UnitIndex {
+                                input2UnitIndex = input1UnitIndex
+                            }
+                        })
                     }
-                    .textCase(.none)
+
+                    HStack {
+                        TextField("", text: $input2,
+                                  onEditingChanged: {
+                                      isInput2Editing = $0
+                                      if isInput2Editing, input2 == "0" || input2 == "0.0" {
+                                          input2 = ""
+                                      }
+                                      if !isInput2Editing, input2 == "." || input2 == "" {
+                                          input2 = "0"
+                                      }
+                                  },
+                                  onCommit: {
+                                      let input2Val = Measurement(value: Double(input2) ?? 0, unit: ContentView.units[input2UnitIndex])
+                                      input1 = "\(input2Val.converted(to: ContentView.units[input1UnitIndex]).value)"
+                                  })
+                            .keyboardType(.decimalPad)
+                            .onReceive(Just(input2), perform: { newValue in
+                                let filtered = filterInputForDecimal(newValue)
+
+                                if filtered != newValue {
+                                    input2 = filtered
+                                }
+                            })
+                            .onChange(of: input2, perform: { _ in
+                                if !isInput1Editing {
+                                    let input2Val = Measurement(value: Double(input2) ?? 0, unit: ContentView.units[input2UnitIndex])
+                                    input1 = "\(input2Val.converted(to: ContentView.units[input1UnitIndex]).value)"
+                                }
+                            })
+
+                        // .labelsHidden doesn't work
+                        Picker("", selection: $input2UnitIndex) {
+                            ForEach(0..<ContentView.units.count) { index in
+                                Text(ContentView.units[index].symbol)
+                            }
+                        }
+                        .onChange(of: input2UnitIndex, perform: { [input2UnitIndex] value in
+                            if value == input1UnitIndex {
+                                input1UnitIndex = input2UnitIndex
+                            }
+                        })
+                    }
                 }
+                .textCase(.none)
             }
-            .navigationBarTitle("Unit converter")
+            .navigationBarTitle("Length converter")
         }
     }
 
