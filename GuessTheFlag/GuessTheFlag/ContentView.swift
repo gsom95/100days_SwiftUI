@@ -15,6 +15,9 @@ struct ContentView: View {
     @State private var scoreTitle = ""
     @State private var score = 0
 
+    @State private var animationAmount = 0.0
+    @State private var wrongAnswersOpacity = 1.0
+
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .top, endPoint: .bottom)
@@ -34,10 +37,20 @@ struct ContentView: View {
                     Button(action: {
                         flagTapped(index)
                     }, label: {
-                        Image(countries[index])
-                            .clipShape(Capsule())
-                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                            .shadow(color: .black, radius: 2)
+                        if index == correctAnswer {
+                            Image(countries[index])
+                                .clipShape(Capsule())
+                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                                .shadow(color: .black, radius: 2)
+                                .rotationEffect(.degrees(animationAmount))
+                                .animation(Animation.easeInOut(duration: 1.0))
+                        } else {
+                            Image(countries[index])
+                                .clipShape(Capsule())
+                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                                .shadow(color: .black, radius: 2)
+                                .opacity(self.wrongAnswersOpacity)
+                        }
                     })
                 }
 
@@ -52,6 +65,7 @@ struct ContentView: View {
         .actionSheet(isPresented: $showingScore) {
             ActionSheet(title: Text(scoreTitle), message: Text("Your score is \(score)"), buttons: [
                 .default(Text("Continue")) {
+                    self.wrongAnswersOpacity = 1.0
                     self.askQuestion()
                 },
             ])
@@ -59,7 +73,15 @@ struct ContentView: View {
     }
 
     func flagTapped(_ number: Int) {
+        wrongAnswersOpacity = 0.25
         if number == correctAnswer {
+            // Although we have 64bit ints, I don't want to risk and wait for int overflow. Thus this check.
+            if animationAmount > 360 {
+                animationAmount -= 360
+            } else {
+                animationAmount += 360
+            }
+
             scoreTitle = "Correct"
             score += 1
         } else {
