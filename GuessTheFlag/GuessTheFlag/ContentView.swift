@@ -49,10 +49,12 @@ struct ContentView: View {
                 Spacer()
             }
         }
-        .alert(isPresented: $showingScore) {
-            Alert(title: Text(scoreTitle), message: Text("Your score is \(score)"), dismissButton: .default(Text("Continue")) {
-                self.askQuestion()
-            })
+        .actionSheet(isPresented: $showingScore) {
+            ActionSheet(title: Text(scoreTitle), message: Text("Your score is \(score)"), buttons: [
+                .default(Text("Continue")) {
+                    self.askQuestion()
+                },
+            ])
         }
     }
 
