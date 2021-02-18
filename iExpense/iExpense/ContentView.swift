@@ -15,14 +15,16 @@ struct ContentView: View {
             self.showingSheet.toggle()
         }
         .sheet(isPresented: $showingSheet, content: {
-            SecondView()
+            SecondView(name: "Some Name")
         })
     }
 }
 
 struct SecondView: View {
+    var name: String
+
     var body: some View {
-        Text("Second View")
+        Text("Hello, \(name)!")
     }
 }
 
