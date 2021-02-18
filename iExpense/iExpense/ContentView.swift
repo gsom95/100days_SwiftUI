@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showingSheet = false
+    @State private var numbers = [Int]()
+    @State private var currentNumber = 1
 
     var body: some View {
-        Button("Show Sheet") {
-            self.showingSheet.toggle()
+        VStack {
+            List {
+                ForEach(numbers, id: \.self) {
+                    Text("\($0)")
+                }
+                .onDelete(perform: removeRows)
+
+                Button("Add number") {
+                    self.numbers.append(self.currentNumber)
+                    self.currentNumber += 1
+                }
+            }
         }
-        .sheet(isPresented: $showingSheet, content: {
-            SecondView(name: "Some Name")
-        })
     }
-}
 
-struct SecondView: View {
-    var name: String
-
-    @Environment(\.presentationMode) var presentationMode
-
-    var body: some View {
-        Button("Dismiss") {
-            self.presentationMode.wrappedValue.dismiss()
-        }
+    func removeRows(at offests: IndexSet) {
+        numbers.remove(atOffsets: offests)
     }
 }
 
