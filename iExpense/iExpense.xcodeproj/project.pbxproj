@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7825148125EE4979000F490B /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7825148025EE4979000F490B /* ExpenseItem.swift */; };
+		7825148425EE4A78000F490B /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7825148325EE4A78000F490B /* Expenses.swift */; };
 		78BE610125D1A71D000AC32F /* iExpenseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BE610025D1A71D000AC32F /* iExpenseApp.swift */; };
 		78BE610325D1A71D000AC32F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BE610225D1A71D000AC32F /* ContentView.swift */; };
 		78BE610525D1A71E000AC32F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78BE610425D1A71E000AC32F /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		7825148025EE4979000F490B /* ExpenseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
+		7825148325EE4A78000F490B /* Expenses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
 		78BE60FD25D1A71D000AC32F /* iExpense.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iExpense.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BE610025D1A71D000AC32F /* iExpenseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iExpenseApp.swift; sourceTree = "<group>"; };
 		78BE610225D1A71D000AC32F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				78BE610925D1A71E000AC32F /* Info.plist */,
 				78BE610625D1A71E000AC32F /* Preview Content */,
 				7825148025EE4979000F490B /* ExpenseItem.swift */,
+				7825148325EE4A78000F490B /* Expenses.swift */,
 			);
 			path = iExpense;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7825148425EE4A78000F490B /* Expenses.swift in Sources */,
 				78BE610325D1A71D000AC32F /* ContentView.swift in Sources */,
 				7825148125EE4979000F490B /* ExpenseItem.swift in Sources */,
 				78BE610125D1A71D000AC32F /* iExpenseApp.swift in Sources */,
