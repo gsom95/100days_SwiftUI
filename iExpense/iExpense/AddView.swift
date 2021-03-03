@@ -14,6 +14,8 @@ struct AddView: View {
     @State private var type = "Personal"
     @State private var amount = ""
 
+    @State private var showErrorAlert = false
+
     @ObservedObject var expenses: Expenses
 
     static let types = ["Business", "Personal"]
@@ -36,8 +38,18 @@ struct AddView: View {
                     let item = ExpenseItem(name: self.name, type: self.type, amount: actualAmount)
                     self.expenses.items.append(item)
                     self.presentationMode.wrappedValue.dismiss()
+                } else {
+                    showErrorAlert = true
                 }
             })
+            .alert(isPresented: $showErrorAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("Amount should be an integer number!"),
+                    dismissButton: .default(Text("Continue")) {
+                        self.amount = ""
+                    })
+            }
         }
     }
 }
