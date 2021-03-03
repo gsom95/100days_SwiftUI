@@ -38,6 +38,7 @@ struct ContentView: View {
                     Image(systemName: "plus")
                 }))
             .navigationBarTitle("iExpense")
+            .navigationBarItems(leading: EditButton())
         }
     }
 
